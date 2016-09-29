@@ -1,0 +1,57 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @hotel.name %>
+</p>
+
+<p>
+  <strong>Street:</strong>
+  <%= @hotel.street %>
+</p>
+
+<p>
+  <strong>Suburb:</strong>
+  <%= @hotel.suburb %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @hotel.state %>
+</p>
+
+<p>
+  <strong>Postcode:</strong>
+  <%= @hotel.postcode %>
+</p>
+
+<p>
+  <strong>Country:</strong>
+  <%= @hotel.country %>
+</p>
+
+
+<%= link_to 'Edit', edit_hotel_path(@hotel) %> |
+<%= link_to 'Back', hotels_path %>
+
+<div id="map"></div>
+<script>
+
+function initMap() {
+  var myLatLng = {lat: <%= @hotel.latitude %>, lng: <%= @hotel.longitude %> };
+
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 15,
+    center: myLatLng
+  });
+
+  var marker = new google.maps.Marker({
+    position: myLatLng,
+    map: map,
+    title: '<%= @hotel.name %>'
+  });
+}
+</script>
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCR1FSyuTsZCBcx0qVf95FvbNPm8ru9CRc&callback=initMap">
+</script>

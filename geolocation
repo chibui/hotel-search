@@ -1,0 +1,93 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Hotels</h1>
+
+<div id="map"></div>
+
+
+
+<script>
+
+function initMap() {
+
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 7,
+    center: {lat: -35, lng: 150}
+    // {lat: -33.8798834333333, lng: 151.200380133333}
+  });
+var infoWindow = new google.maps.InfoWindow({map: map});
+//   <% @hotels.each do |hotel| %>
+//   var myLatLng = {lat: <%= hotel.latitude %>, lng: <%= hotel.longitude %> };
+//   var marker = new google.maps.Marker({
+//     position: myLatLng,
+//     map: map,
+//     title: '<%= hotel.name %>'
+//   });
+//   <% end %>
+// }
+// Try HTML5 geolocation.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('Location found.');
+            map.setCenter(pos);
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+      }
+
+      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+      }
+</script>
+
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCR1FSyuTsZCBcx0qVf95FvbNPm8ru9CRc&callback=initMap">
+    </script>
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Street</th>
+      <th>Suburb</th>
+      <th>State</th>
+      <th>Postcode</th>
+      <th>Country</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @hotels.each do |hotel| %>
+      <tr>
+        <td><%= hotel.name %></td>
+        <td><%= hotel.street %></td>
+        <td><%= hotel.suburb %></td>
+        <td><%= hotel.state %></td>
+        <td><%= hotel.postcode %></td>
+        <td><%= hotel.country %></td>
+        <td><%= link_to 'Show', hotel %></td>
+        <td><%= link_to 'Edit', edit_hotel_path(hotel) %></td>
+        <td><%= link_to 'Destroy', hotel, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Hotel', new_hotel_path %>

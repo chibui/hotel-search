@@ -1,0 +1,44 @@
+<div id="map"></div>
+
+
+
+<script>
+
+function initMap() {
+
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 14,
+
+    <% if @location %>
+    // dumps the hased values of @location [0]=lat [1]=lng as coordinates are thrown in a array by Geocoder
+    center: {lat: <%=@location[0]%>, lng: <%=@location[1]%>}
+    <% else %>
+    center: {lat: -33.8798834333333, lng: 151.200380133333}
+    <% end %>
+  });
+
+  <% @hotels.each_with_index do |hotel, index| %>
+  var myLatLng<%= index %> = {lat: <%= hotel.latitude %>, lng: <%= hotel.longitude %> };
+
+  var contentString<%= index %> = '<%= hotel.name %>';
+
+     var infowindow<%= index %> = new google.maps.InfoWindow({
+       content: contentString<%= index %>
+     });
+
+  var marker<%= index %> = new google.maps.Marker({
+    position: myLatLng<%= index %>,
+    map: map,
+    title: '<%= hotel.name %>'
+  });
+
+  marker<%= index %>.addListener('click', function() {
+            infowindow<%= index %>.open(map, marker<%= index %>);
+          });
+  <% end %>
+}
+</script>
+
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCR1FSyuTsZCBcx0qVf95FvbNPm8ru9CRc&callback=initMap">
+    </script>
